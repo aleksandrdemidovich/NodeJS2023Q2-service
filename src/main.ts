@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as fs from 'fs';
 import * as swaggerUi from 'swagger-ui-express';
-import { parse } from 'yaml'
+import { parse } from 'yaml';
 
 dotenv.config();
 const PORT = process.env.PORT;
@@ -16,12 +16,7 @@ async function bootstrap() {
   const swaggerDocument = parse(file);
 
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      skipMissingProperties: false,
-    }),
-  );
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(PORT);
 }
 bootstrap();
