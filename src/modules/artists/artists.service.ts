@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { mockArtists, mockTracks } from 'src/db/db';
+import { mockAlbums, mockArtists, mockTracks } from 'src/db/db';
 import { Artist } from './entities/artist.entity';
 import { v4 } from 'uuid';
 import { validateId } from 'src/shared/utils/uuidUtils';
@@ -57,6 +57,12 @@ export class ArtistsService {
     mockTracks.map((track) => {
       if (track.artistId === id) {
         track.artistId = null;
+      }
+    });
+
+    mockAlbums.map((album) => {
+      if (album.artistId === id) {
+        album.artistId = null;
       }
     });
   }
