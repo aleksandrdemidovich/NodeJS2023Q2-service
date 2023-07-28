@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpCode, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, HttpCode, Put, ParseUUIDPipe } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { IsUUID } from 'class-validator';
 
 @Controller('artist')
 export class ArtistsController {
@@ -18,18 +19,21 @@ export class ArtistsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  @IsUUID()
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.artistsService.findOne(id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
+  @IsUUID()
+  update(@Param('id', new ParseUUIDPipe()) id: string, @Body() updateArtistDto: UpdateArtistDto) {
     return this.artistsService.update(id, updateArtistDto);
   }
 
   @Delete(':id')
+  @IsUUID()
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.artistsService.remove(id);
   }
 }

@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { mockAlbums, mockArtists, mockFavorites, mockTracks } from 'src/db/db';
-import { validateId } from 'src/shared/utils/uuidUtils';
 import { Artist } from '../artists/entities/artist.entity';
 import { Album } from '../albums/entities/album.entity';
 import { Track } from '../tracks/entities/track.entity';
@@ -37,11 +36,10 @@ export class FavoritesService {
   }
 
   addTrackToFavs(id: string) {
-    validateId(id);
     const track = mockTracks.find((track) => track.id === id);
     if (!track) {
       throw new HttpException(
-        'User not found',
+        'Track not found',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
@@ -50,7 +48,6 @@ export class FavoritesService {
   }
 
   removeTrackFromFavs(id: string) {
-    validateId(id);
     const trackIndex = mockFavorites.tracks.indexOf(id);
 
     if (trackIndex === -1) {
@@ -63,7 +60,6 @@ export class FavoritesService {
   }
 
   addAlbumToFavs(id: string) {
-    validateId(id);
     const album = mockAlbums.find((album) => album.id === id);
     if (!album) {
       throw new HttpException(
@@ -76,7 +72,6 @@ export class FavoritesService {
   }
 
   removeAlbumFromFavs(id: string) {
-    validateId(id);
     const albumIndex = mockFavorites.albums.indexOf(id);
 
     if (albumIndex === -1) {
@@ -89,7 +84,6 @@ export class FavoritesService {
   }
 
   addArtistToFavs(id: string) {
-    validateId(id);
     const artist = mockArtists.find((artist) => artist.id === id);
     if (!artist) {
       throw new HttpException(
@@ -102,7 +96,6 @@ export class FavoritesService {
   }
 
   removeArtistFromFavs(id: string) {
-    validateId(id);
     const artistIndex = mockFavorites.artists.indexOf(id);
     if (artistIndex === -1) {
       throw new HttpException(

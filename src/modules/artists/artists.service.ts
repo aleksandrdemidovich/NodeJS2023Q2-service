@@ -4,7 +4,6 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 import { mockAlbums, mockArtists, mockTracks } from 'src/db/db';
 import { Artist } from './entities/artist.entity';
 import { v4 } from 'uuid';
-import { validateId } from 'src/shared/utils/uuidUtils';
 
 @Injectable()
 export class ArtistsService {
@@ -23,8 +22,6 @@ export class ArtistsService {
   }
 
   findOne(id: string): Artist {
-    validateId(id);
-
     const artist = mockArtists.find((artist) => artist.id === id);
     if (!artist) {
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
@@ -33,7 +30,6 @@ export class ArtistsService {
   }
 
   update(id: string, { name, grammy }: UpdateArtistDto): Artist {
-    validateId(id);
     const artist = mockArtists.find((artist) => artist.id === id);
     if (!artist) {
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
@@ -46,7 +42,6 @@ export class ArtistsService {
   }
 
   remove(id: string) {
-    validateId(id);
     const artistIndex = mockArtists.findIndex((artist) => artist.id === id);
     if (artistIndex === -1) {
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);

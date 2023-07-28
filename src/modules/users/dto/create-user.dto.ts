@@ -1,12 +1,10 @@
-import { IsDefined, IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  @IsDefined()
   @IsString()
   login: string;
 
-  @IsDefined()
   @IsNotEmpty()
   @IsString()
   password: string;

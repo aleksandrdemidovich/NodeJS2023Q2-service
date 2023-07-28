@@ -1,5 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
+import { IsUUID } from 'class-validator';
 
 @Controller('favs')
 export class FavoritesController {
@@ -11,38 +22,41 @@ export class FavoritesController {
   }
 
   @Post('track/:id')
-  addTrackToFavs(@Param('id') id: string) {
+  @IsUUID()
+  addTrackToFavs(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.favoritesService.addTrackToFavs(id);
   }
 
-
   @Delete('track/:id')
+  @IsUUID()
   @HttpCode(204)
-  removeTrackFromFavs(@Param('id') id: string) {
+  removeTrackFromFavs(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.favoritesService.removeTrackFromFavs(id);
   }
 
   @Post('album/:id')
-  addAlbumToFavs(@Param('id') id: string) {
+  @IsUUID()
+  addAlbumToFavs(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.favoritesService.addAlbumToFavs(id);
   }
 
-
   @Delete('album/:id')
+  @IsUUID()
   @HttpCode(204)
-  removeAlbumFromFavs(@Param('id') id: string) {
+  removeAlbumFromFavs(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.favoritesService.removeAlbumFromFavs(id);
   }
 
   @Post('artist/:id')
-  addArtistToFavs(@Param('id') id: string) {
+  @IsUUID()
+  addArtistToFavs(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.favoritesService.addArtistToFavs(id);
   }
 
-
   @Delete('artist/:id')
+  @IsUUID()
   @HttpCode(204)
-  removeArtistFromFavs(@Param('id') id: string) {
+  removeArtistFromFavs(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.favoritesService.removeArtistFromFavs(id);
   }
 }

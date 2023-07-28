@@ -4,7 +4,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { mockUsers } from 'src/db/db';
 import { v4 } from 'uuid';
 import { User } from './entities/user.entity';
-import { validateId } from 'src/shared/utils/uuidUtils';
 
 @Injectable()
 export class UsersService {
@@ -29,7 +28,6 @@ export class UsersService {
   }
 
   findOne(id: string): Omit<User, 'password'> {
-    validateId(id);
     const user = mockUsers.find((user) => user.id === id);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -46,7 +44,6 @@ export class UsersService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    validateId(id);
     const user = mockUsers.find((user) => user.id === id);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -66,7 +63,6 @@ export class UsersService {
   }
 
   remove(id: string) {
-    validateId(id);
     const userIndex = mockUsers.findIndex((user) => user.id === id);
     if (userIndex === -1) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);

@@ -1,27 +1,21 @@
 import {
   IsNotEmpty,
-  IsDefined,
   IsString,
-  Length,
-  IsOptional,
   IsNumber,
 } from 'class-validator';
+import { IsStringOrNull } from '../../../validators/is-null.validator';
 
 export class CreateTrackDto {
   @IsNotEmpty()
-  @IsDefined()
   @IsString()
   name: string;
 
-  @IsDefined()
-  @IsOptional()
+  @IsStringOrNull()
   artistId: string | null; // refers to Artist
 
-  @IsDefined()
-  @IsOptional()
+  @IsStringOrNull()
   albumId: string | null; // refers to Album
 
-  @IsDefined()
   @IsNotEmpty()
   @IsNumber()
   duration: number;

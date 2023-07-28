@@ -4,12 +4,10 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 import { v4 } from 'uuid';
 import { mockAlbums, mockTracks } from 'src/db/db';
-import { validateId } from 'src/shared/utils/uuidUtils';
 
 @Injectable()
 export class AlbumsService {
   create({ name, year, artistId }: CreateAlbumDto): Album {
-
     const newAlbum: Album = {
       id: v4(),
       name,
@@ -25,7 +23,6 @@ export class AlbumsService {
   }
 
   findOne(id: string): Album {
-    validateId(id);
     const album = mockAlbums.find((album) => album.id === id);
     if (!album) {
       throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
@@ -34,7 +31,6 @@ export class AlbumsService {
   }
 
   update(id: string, { name, year, artistId }: UpdateAlbumDto): Album {
-    validateId(id);
     const album = mockAlbums.find((album) => album.id === id);
     if (!album) {
       throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
@@ -48,7 +44,6 @@ export class AlbumsService {
   }
 
   remove(id: string) {
-    validateId(id);
     const albumIndex = mockAlbums.findIndex((album) => album.id === id);
     if (albumIndex === -1) {
       throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
