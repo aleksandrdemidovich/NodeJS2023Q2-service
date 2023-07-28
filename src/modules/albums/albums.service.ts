@@ -3,7 +3,7 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 import { v4 } from 'uuid';
-import { mockAlbums, mockTracks } from 'src/db/db';
+import { mockAlbums, mockFavorites, mockTracks } from 'src/db/db';
 
 @Injectable()
 export class AlbumsService {
@@ -54,6 +54,12 @@ export class AlbumsService {
     mockTracks.map((track) => {
       if (track.albumId === id) {
         track.albumId = null;
+      }
+    });
+
+    mockFavorites.albums.map((albumId) => {
+      if (albumId === id) {
+        albumId = null;
       }
     });
   }

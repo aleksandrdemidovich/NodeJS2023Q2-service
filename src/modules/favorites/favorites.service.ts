@@ -53,7 +53,7 @@ export class FavoritesService {
     if (trackIndex === -1) {
       throw new HttpException(
         'Track not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.NOT_FOUND,
       );
     }
     mockFavorites.tracks.splice(trackIndex, 1);
@@ -77,7 +77,7 @@ export class FavoritesService {
     if (albumIndex === -1) {
       throw new HttpException(
         'Album not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.NOT_FOUND,
       );
     }
     mockFavorites.albums.splice(albumIndex, 1);
@@ -100,7 +100,7 @@ export class FavoritesService {
     if (artistIndex === -1) {
       throw new HttpException(
         'Artist not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.NOT_FOUND,
       );
     }
     mockFavorites.artists.splice(artistIndex, 1);

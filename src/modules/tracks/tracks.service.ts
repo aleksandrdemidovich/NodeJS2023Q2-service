@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { mockTracks } from 'src/db/db';
+import { mockFavorites, mockTracks } from 'src/db/db';
 import { v4 } from 'uuid';
 import { Track } from './entities/track.entity';
 
@@ -56,5 +56,11 @@ export class TracksService {
     }
 
     mockTracks.splice(trackIndex, 1);
+
+    mockFavorites.tracks.map((trackId) => {
+      if (trackId === id) {
+        trackId = null;
+      }
+    });
   }
 }
