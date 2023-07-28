@@ -65,6 +65,6 @@ export class ArtistsService {
       if (artistId === id) {
         artistId = null;
       }
-    })
+    });
   }
 }

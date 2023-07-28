@@ -51,10 +51,7 @@ export class FavoritesService {
     const trackIndex = mockFavorites.tracks.indexOf(id);
 
     if (trackIndex === -1) {
-      throw new HttpException(
-        'Track not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
     mockFavorites.tracks.splice(trackIndex, 1);
   }
@@ -75,10 +72,7 @@ export class FavoritesService {
     const albumIndex = mockFavorites.albums.indexOf(id);
 
     if (albumIndex === -1) {
-      throw new HttpException(
-        'Album not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }
     mockFavorites.albums.splice(albumIndex, 1);
   }
@@ -98,10 +92,7 @@ export class FavoritesService {
   removeArtistFromFavs(id: string) {
     const artistIndex = mockFavorites.artists.indexOf(id);
     if (artistIndex === -1) {
-      throw new HttpException(
-        'Artist not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     }
     mockFavorites.artists.splice(artistIndex, 1);
   }

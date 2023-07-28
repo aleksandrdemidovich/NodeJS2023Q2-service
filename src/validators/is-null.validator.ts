@@ -9,7 +9,7 @@ import {
 
 @ValidatorConstraint({ name: 'stringOrNull', async: false })
 export class StringOrNullValidator implements ValidatorConstraintInterface {
-  validate(value: any, args: ValidationArguments) {
+  validate(value: any, _args: ValidationArguments) {
     if (value === null) {
       return true;
     }
@@ -23,7 +23,7 @@ export class StringOrNullValidator implements ValidatorConstraintInterface {
 }
 
 export function IsStringOrNull(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: Record<string, any>, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,

@@ -9,8 +9,7 @@ export const mockTracks: Track[] = [];
 export const mockArtists: Artist[] = [];
 export const mockAlbums: Album[] = [];
 export const mockFavorites: Favorite = {
-    artists: [],
-    albums: [],
-    tracks: [],
+  artists: [],
+  albums: [],
+  tracks: [],
 };
-
