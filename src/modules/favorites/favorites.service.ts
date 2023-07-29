@@ -37,6 +37,15 @@ export class FavoritesService {
 
   addTrackToFavs(id: string) {
     const track = mockTracks.find((track) => track.id === id);
+    const trackInFavs = mockFavorites.tracks.some((trackId) => trackId === id);
+
+    if (trackInFavs) {
+      throw new HttpException(
+        'Track is already in favorites',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     if (!track) {
       throw new HttpException(
         'Track not found',
@@ -58,6 +67,15 @@ export class FavoritesService {
 
   addAlbumToFavs(id: string) {
     const album = mockAlbums.find((album) => album.id === id);
+    const albumInFavs = mockFavorites.albums.some((albumId) => albumId === id);
+
+    if (albumInFavs) {
+      throw new HttpException(
+        'Album is already in favorites',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     if (!album) {
       throw new HttpException(
         'Album not found',
@@ -79,6 +97,17 @@ export class FavoritesService {
 
   addArtistToFavs(id: string) {
     const artist = mockArtists.find((artist) => artist.id === id);
+    const artistInFavs = mockFavorites.artists.some(
+      (artistId) => artistId === id,
+    );
+
+    if (artistInFavs) {
+      throw new HttpException(
+        'Artist is already in favorites',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     if (!artist) {
       throw new HttpException(
         'Artist not found',

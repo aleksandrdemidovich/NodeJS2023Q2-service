@@ -6,6 +6,7 @@ import {
   ValidationOptions,
   isNotEmpty,
 } from 'class-validator';
+import { v4 as uuidv4, validate, version } from 'uuid';
 
 @ValidatorConstraint({ name: 'stringOrNull', async: false })
 export class StringOrNullValidator implements ValidatorConstraintInterface {
@@ -13,12 +14,11 @@ export class StringOrNullValidator implements ValidatorConstraintInterface {
     if (value === null) {
       return true;
     }
-
-    return typeof value === 'string' && isNotEmpty(value);
+    return typeof value === 'string' && validate(value) && version(value) === 4;
   }
 
   defaultMessage(args: ValidationArguments) {
-    return `${args.property} must be a non-empty string or null.`;
+    return `${args.property} must be a non-empty string or a valid UUIDv4 or null.`;
   }
 }
 
