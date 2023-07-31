@@ -15,7 +15,7 @@ async function bootstrap() {
   const file = fs.readFileSync('./doc/api.yaml', 'utf8');
   const swaggerDocument = parse(file);
 
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(PORT);
 }
