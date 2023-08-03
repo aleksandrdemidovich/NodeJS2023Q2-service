@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -6,7 +7,6 @@ import * as fs from 'fs';
 import * as swaggerUi from 'swagger-ui-express';
 import { parse } from 'yaml';
 
-dotenv.config();
 const PORT = process.env.PORT;
 
 async function bootstrap() {

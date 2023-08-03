@@ -1,34 +1,35 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { mockUsers } from 'src/db/db';
-import { v4 } from 'uuid';
 import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto): Omit<User, 'password'> {
-    const newUser: User = {
-      id: v4(),
-      login: createUserDto.login,
-      password: createUserDto.password,
-      version: 1,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
+  async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
+    let newUser = new User();
+    newUser = { ...newUser, ...createUserDto };
+    await this.userRepository.save(newUser);
+    delete newUser.password;
+    return {
+      ...newUser,
+      createdAt: +newUser.createdAt,
+      updatedAt: +newUser.updatedAt,
     };
-    mockUsers.push(newUser);
-
-    const { password, ...userWithoutPass } = newUser;
-
-    return userWithoutPass;
   }
 
-  findAll(): Omit<User, 'password'>[] {
-    return mockUsers.map(({ password, ...rest }) => rest);
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.userRepository.find();
+    return users.map(({ password, ...rest }) => rest);
   }
 
-  findOne(id: string): Omit<User, 'password'> {
-    const user = mockUsers.find((user) => user.id === id);
+  async findOne(id: string): Promise<Omit<User, 'password'>> {
+    const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -37,14 +38,9 @@ export class UsersService {
     return userWithoutPass;
   }
 
-  update(id: string, { oldPassword, newPassword }: UpdateUserDto) {
-    if (!oldPassword || !newPassword) {
-      throw new HttpException(
-        'Old password and new password are required',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    const user = mockUsers.find((user) => user.id === id);
+  async update(id: string, { oldPassword, newPassword }: UpdateUserDto) {
+    let user = await this.userRepository.findOneBy({ id });
+
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -53,21 +49,24 @@ export class UsersService {
       throw new HttpException('Wrong old password', HttpStatus.FORBIDDEN);
     }
 
-    user.password = newPassword;
-    user.version += 1;
-    user.updatedAt = Date.now();
+    user = {
+      ...user,
+      password: newPassword,
+      version: user.version + 1,
+      updatedAt: new Date(),
+    };
 
-    const { password, ...userWithoutPass } = user;
+    await this.userRepository.save(user);
+    delete user.password;
 
-    return userWithoutPass;
+    return { ...user, createdAt: +user.createdAt, updatedAt: +user.updatedAt };
   }
 
-  remove(id: string) {
-    const userIndex = mockUsers.findIndex((user) => user.id === id);
-    if (userIndex === -1) {
+  async remove(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-
-    mockUsers.splice(userIndex, 1);
+    await this.userRepository.delete(id);
   }
 }
