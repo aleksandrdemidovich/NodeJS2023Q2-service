@@ -18,7 +18,5 @@ export const datasourceOptions: DataSourceOptions = {
   migrations: [],
 };
 
-console.log(process.env.DATABASE_PORT);
-
 const dataSource = new DataSource(datasourceOptions);
 export default dataSource;

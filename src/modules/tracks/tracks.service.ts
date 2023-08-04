@@ -1,66 +1,48 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { mockFavorites, mockTracks } from 'src/db/db';
-import { v4 } from 'uuid';
 import { Track } from './entities/track.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TracksService {
-  create({ name, artistId, albumId, duration }: CreateTrackDto): Track {
-    const newTrack = {
-      id: v4(),
-      name,
-      artistId,
-      albumId,
-      duration,
-    };
-    mockTracks.push(newTrack);
+  constructor(
+    @InjectRepository(Track)
+    private trackRepository: Repository<Track>,
+  ) {}
 
-    return newTrack;
+  async create(createTrackDto: CreateTrackDto) {
+    const track = this.trackRepository.create(createTrackDto);
+    return this.trackRepository.save(track);
   }
 
-  findAll(): Track[] {
-    return mockTracks;
+  async findAll(): Promise<Track[]> {
+    return await this.trackRepository.find();
   }
 
-  findOne(id: string): Track {
-    const track = mockTracks.find((track) => track.id === id);
+  async findOne(id: string): Promise<Track> {
+    const track = await this.trackRepository.findOne({ where: { id } });
     if (!track) {
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
     return track;
   }
 
-  update(
-    id: string,
-    { albumId, artistId, duration, name }: UpdateTrackDto,
-  ): Track {
-    const track = mockTracks.find((track) => track.id === id);
+  async update(id: string, updateAlbumDto: UpdateTrackDto): Promise<Track> {
+    const track = await this.trackRepository.findOne({ where: { id } });
     if (!track) {
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
-
-    track.name = name;
-    track.albumId = albumId;
-    track.artistId = artistId;
-    track.duration = duration;
-
-    return track;
+    Object.assign(track, updateAlbumDto);
+    return await this.trackRepository.save(track);
   }
 
-  remove(id: string) {
-    const trackIndex = mockTracks.findIndex((track) => track.id === id);
-    if (trackIndex === -1) {
+  async remove(id: string) {
+    const track = await this.trackRepository.findOne({ where: { id } });
+    if (!track) {
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
-
-    mockTracks.splice(trackIndex, 1);
-
-    mockFavorites.tracks.map((trackId) => {
-      if (trackId === id) {
-        trackId = null;
-      }
-    });
+    await this.trackRepository.delete(id);
   }
 }
