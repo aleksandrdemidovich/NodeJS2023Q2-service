@@ -1,0 +1,51 @@
+version: '3'
+services:
+  node:
+    container_name: node
+    build: .
+    restart: always
+    environment:
+      DATABASE_HOST: 'postgres'
+      DATABASE_PORT: '${DATABASE_PORT}'
+      DATABASE_USERNAME: '${DATABASE_USERNAME}'
+      DATABASE_PASSWORD: '${DATABASE_PASSWORD}'
+      DATABASE_NAME: '${DATABASE_NAME}'
+      PORT: '${PORT}'
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/app/
+      - node_modules:/usr/app/node_modules
+    command: ['npm', 'run', 'start:docker']
+    networks:
+      - app_bridge
+
+  postgres:
+    container_name: postgres
+    build: ./Docker/db
+    restart: always
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - pglog:/var/lib/postgresql/postgresql.log
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    networks:
+      - app_bridge
+
+volumes:
+  pgdata:
+  pglog:
+  node_modules:
+
+networks:
+  app_bridge:
+    driver: bridge
+    name: 'app_bridge'

@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
-import { join } from 'path';
 dotenv.config();
+import { join } from 'path';
 import { Album } from 'src/modules/albums/entities/album.entity';
 import { Artist } from 'src/modules/artists/entities/artist.entity';
 import { Favorite } from 'src/modules/favorites/entities/favorite.entity';
