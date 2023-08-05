@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+import { join } from 'path';
 dotenv.config();
 import { Album } from 'src/modules/albums/entities/album.entity';
 import { Artist } from 'src/modules/artists/entities/artist.entity';
@@ -15,7 +16,7 @@ export const datasourceOptions: DataSourceOptions = {
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   entities: [User, Artist, Album, Track, Favorite],
-  migrations: [],
+  migrations: [join(__dirname, '..', 'db/migrations/*.{ts,js}')],
 };
 
 const dataSource = new DataSource(datasourceOptions);
