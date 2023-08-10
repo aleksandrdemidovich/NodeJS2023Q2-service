@@ -3,6 +3,7 @@ import { UsersModule } from './modules/users/users.module';
 import { TracksModule } from './modules/tracks/tracks.module';
 import { ArtistsModule } from './modules/artists/artists.module';
 import { AlbumsModule } from './modules/albums/albums.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { FavoritesModule } from './modules/favorites/favorites.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { datasourceOptions } from './db/data-source-config';
@@ -16,6 +17,7 @@ import { DataSource } from 'typeorm';
     ArtistsModule,
     AlbumsModule,
     FavoritesModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
