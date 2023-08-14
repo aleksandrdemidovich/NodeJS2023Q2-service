@@ -38,6 +38,14 @@ export class UsersService {
     return userWithoutPass;
   }
 
+  async findOneByLogin(login: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({ login });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.FORBIDDEN);
+    }
+    return user;
+  }
+
   async update(id: string, { oldPassword, newPassword }: UpdateUserDto) {
     let user = await this.userRepository.findOneBy({ id });
 
