@@ -1,4 +1,9 @@
-import { ForbiddenException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
@@ -33,6 +38,9 @@ export class AuthService {
     const user = await this.userService.findOneByLogin(login);
 
     const isPasswordValid = await compare(password, user.password);
+
+    console.log(user);
+    console.log(isPasswordValid);
 
     if (!user || !isPasswordValid) {
       throw new ForbiddenException('Invalid credentials');

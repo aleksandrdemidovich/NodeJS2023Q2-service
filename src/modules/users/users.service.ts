@@ -12,6 +12,7 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
   async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
+    //TODO add hash password
     let newUser = new User();
     newUser = { ...newUser, ...createUserDto };
     await this.userRepository.save(newUser);

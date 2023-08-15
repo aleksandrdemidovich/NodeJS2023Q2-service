@@ -6,6 +6,7 @@ import { AlbumsModule } from '../albums/albums.module';
 import { ArtistsModule } from '../artists/artists.module';
 import { TracksModule } from '../tracks/tracks.module';
 import { Favorite } from './entities/favorite.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [FavoritesController],
@@ -16,6 +17,7 @@ import { Favorite } from './entities/favorite.entity';
     forwardRef(() => ArtistsModule),
     forwardRef(() => AlbumsModule),
     forwardRef(() => TracksModule),
+    JwtModule,
   ],
 })
 export class FavoritesModule {}
