@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { HttpModule, MiddlewareConsumer, Module } from '@nestjs/common';
 import { UsersModule } from './modules/users/users.module';
 import { TracksModule } from './modules/tracks/tracks.module';
 import { ArtistsModule } from './modules/artists/artists.module';
@@ -10,6 +10,8 @@ import { datasourceOptions } from './db/data-source-config';
 import { DataSource } from 'typeorm';
 import { LoggerModule } from './logger/logger.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
+import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
+import { AllExceptionsFilter } from './errors/exception.filter';
 
 @Module({
   imports: [

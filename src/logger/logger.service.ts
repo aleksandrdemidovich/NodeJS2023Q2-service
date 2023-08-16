@@ -41,7 +41,6 @@ export class LoggerService extends ConsoleLogger {
   async error(message: any) {
     if (this.loggingLevel > 0) {
       await this.writeToFile(errorLogFileName, message);
-      await this.writeToFile(logFileName, message);
       super.error(message);
     }
   }
