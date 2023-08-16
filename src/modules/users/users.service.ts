@@ -4,6 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { hashPassword } from './hash-password';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -12,13 +14,22 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
   async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
-    //TODO add hash password
+    const { login, password } = createUserDto;
+
     let newUser = new User();
-    newUser = { ...newUser, ...createUserDto };
-    await this.userRepository.save(newUser);
-    delete newUser.password;
-    return {
+    const hashedPassword = await hashPassword(password);
+
+    newUser = {
       ...newUser,
+      login: login,
+      password: hashedPassword,
+    };
+
+    const createdUser = await this.userRepository.save(newUser);
+
+    delete createdUser.password;
+    return {
+      ...createdUser,
       createdAt: +newUser.createdAt,
       updatedAt: +newUser.updatedAt,
     };
@@ -54,13 +65,15 @@ export class UsersService {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    if (user.password !== oldPassword) {
+    const isPasswordValid = await compare(oldPassword, user.password);
+
+    if (!isPasswordValid) {
       throw new HttpException('Wrong old password', HttpStatus.FORBIDDEN);
     }
-
+    const newHashedPassword = await hashPassword(newPassword);
     user = {
       ...user,
-      password: newPassword,
+      password: newHashedPassword,
       version: user.version + 1,
       updatedAt: new Date(),
     };
