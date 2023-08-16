@@ -39,9 +39,6 @@ export class AuthService {
 
     const isPasswordValid = await compare(password, user.password);
 
-    console.log(user);
-    console.log(isPasswordValid);
-
     if (!user || !isPasswordValid) {
       throw new ForbiddenException('Invalid credentials');
     }
