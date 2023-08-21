@@ -7,14 +7,13 @@ import * as swaggerUi from 'swagger-ui-express';
 import { parse } from 'yaml';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './errors/exception.filter';
-import { addListeners } from './errors/exceptionListener';
+import { addErrorListeners } from './errors/exceptionListener';
 import { LoggerService } from './logger/logger.service';
 
 const PORT = process.env.PORT;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    bufferLogs: true,
     logger: new Logger(AppModule.name),
   });
 
@@ -23,11 +22,11 @@ async function bootstrap() {
 
   app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.useGlobalPipes(new ValidationPipe());
-  
+
   const logger = new LoggerService();
   app.useGlobalFilters(new AllExceptionsFilter(logger));
 
-  addListeners(logger);
+  addErrorListeners(logger);
   await app.listen(PORT);
 
   //Test uncaughtException/unhandledRejection

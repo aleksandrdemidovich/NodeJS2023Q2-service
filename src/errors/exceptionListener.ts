@@ -1,6 +1,6 @@
 import { LoggerService } from 'src/logger/logger.service';
 
-export const addListeners = (logger: LoggerService): void => {
+export const addErrorListeners = (logger: LoggerService): void => {
   process
     .on('unhandledRejection', async () => {
       logger.error('Unhandled Rejection... Server will be restarted');

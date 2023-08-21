@@ -1,10 +1,10 @@
-import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { NextFunction, Request, Response } from 'express';
 import { LoggerService } from './logger.service';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private logger = new LoggerService()
+  private logger = new LoggerService();
 
   use(req: Request, res: Response, next: NextFunction) {
     const { ip, method, originalUrl, body, query } = req;
@@ -18,15 +18,15 @@ export class LoggerMiddleware implements NestMiddleware {
       )} ${JSON.stringify(body)} ${contentLength}B - ${userAgent} ${ip}`;
 
       if (res.statusCode >= 500) {
-        this.logger.error('[ERROR] ' + logRequestMessage);
+        this.logger.error(logRequestMessage);
       } else if (res.statusCode >= 400 && res.statusCode < 500) {
-        this.logger.warn('[WARN] ' + logRequestMessage);
+        this.logger.warn(logRequestMessage);
       } else {
-        this.logger.log('[LOG] ' + logRequestMessage);
+        this.logger.log(logRequestMessage);
       }
     });
 
-    let send = res.send;
+    const send = res.send;
     res.send = (exitData) => {
       if (
         res?.getHeader('content-type')?.toString().includes('application/json')
@@ -37,11 +37,11 @@ export class LoggerMiddleware implements NestMiddleware {
         } ${exitData.toString().substring(0, 1000)}`;
 
         if (res.statusCode >= 500) {
-          this.logger.error('[ERROR] ' + logResponseMessage);
+          this.logger.error(logResponseMessage);
         } else if (res.statusCode >= 400 && res.statusCode < 500) {
-          this.logger.warn('[WARN] ' + logResponseMessage);
+          this.logger.warn(logResponseMessage);
         } else {
-          this.logger.log('[LOG] ' + logResponseMessage);
+          this.logger.log(logResponseMessage);
         }
       }
       res.send = send;

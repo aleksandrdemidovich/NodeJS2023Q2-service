@@ -15,6 +15,8 @@
     "start:prod": "node dist/main",
     "install_start": "npm install && npm run start:dev",
     "start:docker": "npm install && npm run typeorm:migrate && npm run start:dev",
+    "docker:build": "docker-compose build --no-cache",
+    "docker:start": "docker-compose up -d",
     "docker:scan": "docker scout cves nodejs2023q2-service-node && docker scout cves nodejs2023q2-service-postgres",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --config ./test/jest-e2e.json",

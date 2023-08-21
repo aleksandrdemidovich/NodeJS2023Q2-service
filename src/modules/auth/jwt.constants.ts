@@ -4,5 +4,3 @@ export const jwtConstants = {
   refreshExpiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
   cryptSalt: +process.env.CRYPT_SALT,
 };
-
-

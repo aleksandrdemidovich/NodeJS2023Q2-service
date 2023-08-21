@@ -5,4 +5,4 @@ export const logDirectory = 'logs';
 export const errorLogFileName = 'error.log';
 export const logFileName = `log.log`;
 
-export const maxLogFileSize = 1024 * 1024;
+export const maxLogFileSize = +process.env.MAX_LOG_FILE_SIZE || 1024 * 1024;
