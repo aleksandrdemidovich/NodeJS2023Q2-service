@@ -11,6 +11,19 @@
 git clone {repository URL}
 ```
 
+## Docker
+Use this commands for build and start docker container
+```
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+## DockerHub images
+
+- Node image - [Pull Node(App) Docker image](https://hub.docker.com/r/demidkbr/nodejs2023q2-service-node).
+- Postgres image - [Pull Postgres(Db) Docker image](https://hub.docker.com/r/demidkbr/nodejs2023q2-service-postgres).
+
+
 ## Installing NPM modules
 
 ```

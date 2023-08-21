@@ -1,70 +1,48 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { mockAlbums, mockArtists, mockFavorites, mockTracks } from 'src/db/db';
 import { Artist } from './entities/artist.entity';
-import { v4 } from 'uuid';
 
 @Injectable()
 export class ArtistsService {
-  create({ name, grammy }: CreateArtistDto): Artist {
-    const newArtist: Artist = {
-      id: v4(),
-      name,
-      grammy,
-    };
-    mockArtists.push(newArtist);
-    return newArtist;
+  constructor(
+    @InjectRepository(Artist)
+    private artistRepository: Repository<Artist>,
+  ) {}
+  async create(createArtistDto: CreateArtistDto): Promise<Artist> {
+    const artist = this.artistRepository.create(createArtistDto);
+    return await this.artistRepository.save(artist);
   }
 
-  findAll(): Artist[] {
-    return mockArtists;
+  async findAll(): Promise<Artist[]> {
+    return await this.artistRepository.find();
   }
 
-  findOne(id: string): Artist {
-    const artist = mockArtists.find((artist) => artist.id === id);
+  async findOne(id: string): Promise<Artist> {
+    const artist = await this.artistRepository.findOne({ where: { id } });
     if (!artist) {
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     }
     return artist;
   }
 
-  update(id: string, { name, grammy }: UpdateArtistDto): Artist {
-    const artist = mockArtists.find((artist) => artist.id === id);
+  async update(id: string, updateArtistDto: UpdateArtistDto): Promise<Artist> {
+    const artist = await this.artistRepository.findOne({ where: { id } });
     if (!artist) {
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     }
 
-    artist.name = name;
-    artist.grammy = grammy;
-
-    return artist;
+    Object.assign(artist, updateArtistDto);
+    return await this.artistRepository.save(artist);
   }
 
-  remove(id: string) {
-    const artistIndex = mockArtists.findIndex((artist) => artist.id === id);
-    if (artistIndex === -1) {
+  async remove(id: string) {
+    const artist = await this.artistRepository.findOne({ where: { id } });
+    if (!artist) {
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     }
-
-    mockArtists.splice(artistIndex, 1);
-
-    mockTracks.map((track) => {
-      if (track.artistId === id) {
-        track.artistId = null;
-      }
-    });
-
-    mockAlbums.map((album) => {
-      if (album.artistId === id) {
-        album.artistId = null;
-      }
-    });
-
-    mockFavorites.artists.map((artistId) => {
-      if (artistId === id) {
-        artistId = null;
-      }
-    });
+    await this.artistRepository.delete(id);
   }
 }

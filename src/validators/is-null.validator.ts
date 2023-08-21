@@ -4,7 +4,6 @@ import {
   ValidationArguments,
   registerDecorator,
   ValidationOptions,
-  isNotEmpty,
 } from 'class-validator';
 import { v4 as uuidv4, validate, version } from 'uuid';
 
@@ -18,7 +17,7 @@ export class StringOrNullValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    return `${args.property} must be a non-empty string or a valid UUIDv4 or null.`;
+    return `${args.property} must be a valid UUIDv4 or null.`;
   }
 }
 
