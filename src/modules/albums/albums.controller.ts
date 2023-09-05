@@ -8,13 +8,16 @@ import {
   Put,
   HttpCode,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { IsUUID } from 'class-validator';
+import { JwtAccessGuard } from 'src/guards/jwt-access-auth.guard';
 
 @Controller('album')
+@UseGuards(JwtAccessGuard)
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
