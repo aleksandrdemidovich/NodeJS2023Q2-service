@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Track } from './entities/track.entity';
 import { AlbumsModule } from '../albums/albums.module';
 import { ArtistsModule } from '../artists/artists.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [TracksController],
@@ -13,6 +14,7 @@ import { ArtistsModule } from '../artists/artists.module';
     TypeOrmModule.forFeature([Track]),
     forwardRef(() => ArtistsModule),
     forwardRef(() => AlbumsModule),
+    JwtModule,
   ],
   exports: [TypeOrmModule, TracksService],
 })

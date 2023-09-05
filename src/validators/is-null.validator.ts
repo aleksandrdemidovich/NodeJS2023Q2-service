@@ -1,11 +1,11 @@
 import {
+  ValidationArguments,
+  ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidationArguments,
   registerDecorator,
-  ValidationOptions,
 } from 'class-validator';
-import { v4 as uuidv4, validate, version } from 'uuid';
+import { validate, version } from 'uuid';
 
 @ValidatorConstraint({ name: 'stringOrNull', async: false })
 export class StringOrNullValidator implements ValidatorConstraintInterface {
